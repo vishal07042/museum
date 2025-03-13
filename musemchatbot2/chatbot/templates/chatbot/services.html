@@ -1,0 +1,135 @@
+{% extends 'chatbot/base.html' %}
+
+{% block hero %}
+<div class="hero-section">
+    <div class="container">
+        <h1 class="display-4">Our Services</h1>
+        <p class="lead">Explore our world-class museum services and experiences</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-walking"></i>
+                    </div>
+                    <h3>{{ services_info.guided_tours.title }}</h3>
+                </div>
+                <p class="text-center">{{ services_info.guided_tours.description }}</p>
+                <hr>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <p><i class="fas fa-clock me-2"></i>{{ services_info.guided_tours.duration }}</p>
+                    </div>
+                    <div class="col-6">
+                        <p><i class="fas fa-tag me-2"></i>{{ services_info.guided_tours.price }}</p>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{% url 'home' %}" class="btn btn-primary">Book a Tour</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>{{ services_info.educational_programs.title }}</h3>
+                </div>
+                <p class="text-center">{{ services_info.educational_programs.description }}</p>
+                <hr>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <p><i class="fas fa-users me-2"></i>{{ services_info.educational_programs.age_groups }}</p>
+                    </div>
+                    <div class="col-6">
+                        <p><i class="fas fa-tag me-2"></i>{{ services_info.educational_programs.price }}</p>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{% url 'home' %}" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-glass-cheers"></i>
+                    </div>
+                    <h3>{{ services_info.special_events.title }}</h3>
+                </div>
+                <p class="text-center">{{ services_info.special_events.description }}</p>
+                <hr>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <p><i class="fas fa-users me-2"></i>{{ services_info.special_events.capacity }}</p>
+                    </div>
+                    <div class="col-6">
+                        <p><i class="fas fa-tag me-2"></i>{{ services_info.special_events.price }}</p>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{% url 'home' %}" class="btn btn-primary">Inquire Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <h3>{{ services_info.membership.title }}</h3>
+                </div>
+                <p class="text-center">{{ services_info.membership.description }}</p>
+                <hr>
+                <h5 class="text-center mb-3">Member Benefits</h5>
+                <ul class="list-unstyled text-center">
+                    {% for benefit in services_info.membership.benefits %}
+                    <li><i class="fas fa-check text-success me-2"></i>{{ benefit }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="text-center mt-3">
+                    <a href="{% url 'home' %}" class="btn btn-primary">Become a Member</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h2 class="section-title">Need More Information?</h2>
+                <p class="lead">Our museum experts are here to help you plan your perfect visit.</p>
+                <div class="mt-4">
+                    <a href="{% url 'home' %}" class="btn btn-primary me-3">
+                        <i class="fas fa-comments me-2"></i>Chat with Us
+                    </a>
+                    <a href="tel:+15551234567" class="btn btn-outline-primary">
+                        <i class="fas fa-phone me-2"></i>Call Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

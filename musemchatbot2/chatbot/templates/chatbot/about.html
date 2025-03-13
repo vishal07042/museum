@@ -1,0 +1,82 @@
+{% extends 'chatbot/base.html' %}
+
+{% block hero %}
+<div class="hero-section">
+    <div class="container">
+        <h1 class="display-4">About Our Museum</h1>
+        <p class="lead">Discover the stories that shape our world</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="section-title">Our History</h2>
+                <p class="lead text-center mb-5">{{ museum_info.history }}</p>
+
+                <h2 class="section-title">Our Mission</h2>
+                <p class="lead text-center mb-5">{{ museum_info.mission }}</p>
+
+                <h2 class="section-title">Museum Highlights</h2>
+                <div class="row justify-content-center">
+                    {% for highlight in museum_info.highlights %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <div class="feature-icon">
+                                    {% if forloop.counter == 1 %}
+                                    <i class="fas fa-archive"></i>
+                                    {% elif forloop.counter == 2 %}
+                                    <i class="fas fa-tools"></i>
+                                    {% elif forloop.counter == 3 %}
+                                    <i class="fas fa-graduation-cap"></i>
+                                    {% elif forloop.counter == 4 %}
+                                    <i class="fas fa-star"></i>
+                                    {% else %}
+                                    <i class="fas fa-university"></i>
+                                    {% endif %}
+                                </div>
+                                <p class="card-text">{{ highlight }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h2 class="section-title">Visit Us</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4><i class="fas fa-clock me-2"></i>Opening Hours</h4>
+                        <p>Monday - Friday: 9:00 AM - 6:00 PM<br>
+                            Saturday - Sunday: 10:00 AM - 4:00 PM</p>
+
+                        <h4><i class="fas fa-map-marker-alt me-2"></i>Location</h4>
+                        <p>Anand Bhavan<br>
+                            Prayagraj, UP 211013</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4><i class="fas fa-ticket-alt me-2"></i>Admission</h4>
+                        <ul class="list-unstyled">
+                            <li>Adults: 100</li>
+                            <li>Children (under 12): 20</li>
+                            <li>Seniors (65+): 50</li>
+                            <li>Students: 50</li>
+                        </ul>
+
+                        <a href="{% url 'home' %}" class="btn btn-primary">
+                            <i class="fas fa-ticket-alt me-2"></i>Book Tickets Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

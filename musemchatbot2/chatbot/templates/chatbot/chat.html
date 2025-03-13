@@ -1,0 +1,206 @@
+{% extends 'chatbot/base.html' %}
+
+{% block hero %}
+<div class="hero-section">
+    <div class="container">
+        <h1 class="display-4">Museum Booking Assistant</h1>
+        <p class="lead">Get help with bookings, information, and more</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="chat-container" id="chatContainer">
+                    <div class="message bot-message">
+                        Hello! I'm your museum booking assistant. I can help you with:
+                        • Booking tickets
+                        • Information about exhibitions
+                        • Tour schedules
+                        • Special events
+                        • General inquiries
+
+                        How can I assist you today?
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control chat-input" id="userInput"
+                        placeholder="Type your message here...">
+                    <button class="btn btn-primary" id="sendMessage">
+                        <i class="fas fa-paper-plane me-2"></i>Send
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-outline-primary quick-action"
+                        onclick="sendQuickMessage('Show me ticket prices')">
+                        <i class="fas fa-tag me-2"></i>Ticket Prices
+                    </button>
+                    <button class="btn btn-outline-primary quick-action"
+                        onclick="sendQuickMessage('What exhibitions are currently on?')">
+                        <i class="fas fa-paint-brush me-2"></i>Current Exhibitions
+                    </button>
+                    <button class="btn btn-outline-primary quick-action"
+                        onclick="sendQuickMessage('Tell me about guided tours')">
+                        <i class="fas fa-walking me-2"></i>Guided Tours
+                    </button>
+                    <button class="btn btn-outline-primary quick-action"
+                        onclick="sendQuickMessage('What are your opening hours?')">
+                        <i class="fas fa-clock me-2"></i>Opening Hours
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let sessionId = null;
+
+    document.getElementById('sendMessage').addEventListener('click', sendMessage);
+    document.getElementById('userInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function sendQuickMessage(message) {
+        document.getElementById('userInput').value = message;
+        sendMessage();
+    }
+
+    function appendMessage(message, isUser) {
+        const chatContainer = document.getElementById('chatContainer');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        
+        if (isUser) {
+            messageDiv.textContent = message;
+        } else {
+            // For bot messages, we want to preserve HTML content
+            messageDiv.innerHTML = message;
+        }
+        
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const userInput = document.getElementById('userInput');
+        const message = userInput.value.trim();
+
+        if (!message) return;
+
+        appendMessage(message, true);
+        userInput.value = '';
+
+        try {
+            const response = await fetch('/chat/message/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    message: message,
+                    session_id: sessionId
+                })
+            });
+
+            const data = await response.json();
+            if (data.session_id) {
+                sessionId = data.session_id;
+            }
+
+            appendMessage(data.response, false);
+        } catch (error) {
+            console.error('Error:', error);
+            appendMessage('Sorry, I encountered an error. Please try again.', false);
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+<style>
+    .chat-container {
+        height: 400px;
+        overflow-y: auto;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .message {
+        margin-bottom: 15px;
+        padding: 10px 15px;
+        border-radius: 10px;
+        max-width: 80%;
+        white-space: pre-line;
+    }
+
+    .user-message {
+        background-color: #007bff;
+        color: white;
+        margin-left: auto;
+    }
+
+    .bot-message {
+        background-color: white;
+        border: 1px solid #dee2e6;
+    }
+
+    .quick-action {
+        white-space: nowrap;
+        margin: 5px;
+    }
+
+    /* QR Code specific styles */
+    .qr-code-container {
+        background-color: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin: 20px 0;
+    }
+
+    .qr-code-container img {
+        max-width: 200px;
+        margin: 10px auto;
+        display: block;
+        border: 2px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: white;
+    }
+
+    .qr-code-container p {
+        margin: 10px 0;
+        text-align: center;
+    }
+</style>
+{% endblock %}

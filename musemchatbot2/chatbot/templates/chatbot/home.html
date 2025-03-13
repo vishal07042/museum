@@ -1,0 +1,169 @@
+{% extends 'chatbot/base.html' %}
+
+{% block hero %}
+<div class="hero-section">
+    <div class="container">
+        <h1 class="display-3">Welcome to Museum Explorer</h1>
+        <p class="lead">Experience art, history, and culture like never before</p>
+        <a href="{% url 'chat' %}" class="btn btn-primary btn-lg mt-3">
+            <i class="fas fa-comments me-2"></i>Start Booking
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="section-title">Featured Exhibitions</h2>
+        <div class="row">
+            {% for exhibition in featured_exhibitions %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ exhibition.image }}" class="card-img-top" alt="{{ exhibition.title }}"
+                        style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ exhibition.title }}</h5>
+                        <p class="card-text">{{ exhibition.description }}</p>
+                        <a href="{% url 'chat' %}" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="section-title">Plan Your Visit</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h4>Location</h4>
+                        <p>Anand Bhavan<br>Prayagraj, Uttar Pradesh</p>
+                        <a href="https://maps.google.com" target="_blank" class="btn btn-outline-primary">Get
+                            Directions</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4>Hours</h4>
+                        <p>Monday - Friday: 9:00 AM - 6:00 PM<br>
+                            Saturday - Sunday: 10:00 AM - 4:00 PM</p>
+                        <a href="{% url 'about' %}" class="btn btn-outline-primary">More Info</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <h4>Tickets</h4>
+                        <p>Adults: 100<br>
+                            Children: 20<br>
+                            Seniors/Students: 50</p>
+                        <a href="{% url 'chat' %}" class="btn btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h2 class="section-title mb-4">Need Assistance?</h2>
+                <p class="lead mb-4">Our Chatbot booking assistant is here to help you plan your visit</p>
+                <a href="{% url 'chat' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-comments me-2"></i>Chat with Our Assistant
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let sessionId = null;
+
+    document.getElementById('sendMessage').addEventListener('click', sendMessage);
+    document.getElementById('userInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function appendMessage(message, isUser) {
+        const chatContainer = document.getElementById('chatContainer');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        messageDiv.textContent = message;
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const userInput = document.getElementById('userInput');
+        const message = userInput.value.trim();
+
+        if (!message) return;
+
+        appendMessage(message, true);
+        userInput.value = '';
+
+        try {
+            const response = await fetch('/chat/message/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    message: message,
+                    session_id: sessionId
+                })
+            });
+
+            const data = await response.json();
+            if (data.session_id) {
+                sessionId = data.session_id;
+            }
+
+            appendMessage(data.response, false);
+        } catch (error) {
+            console.error('Error:', error);
+            appendMessage('Sorry, I encountered an error. Please try again.', false);
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}

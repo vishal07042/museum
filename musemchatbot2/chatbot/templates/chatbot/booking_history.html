@@ -1,0 +1,46 @@
+{% extends 'chatbot/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">My Bookings</h2>
+                {% if bookings %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Booking Reference</th>
+                                <th>Ticket Type</th>
+                                <th>Quantity</th>
+                                <th>Visit Date</th>
+                                <th>Total Amount</th>
+                                <th>Booking Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.booking_reference }}</td>
+                                <td>{{ booking.ticket.ticket_type }}</td>
+                                <td>{{ booking.quantity }}</td>
+                                <td>{{ booking.visit_date }}</td>
+                                <td>${{ booking.total_amount }}</td>
+                                <td>{{ booking.booking_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center">
+                    <p>You haven't made any bookings yet.</p>
+                    <a href="{% url 'home' %}" class="btn btn-primary">Book Tickets Now</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

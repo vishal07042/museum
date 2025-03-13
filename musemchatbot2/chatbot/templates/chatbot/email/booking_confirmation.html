@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #333;
+            margin: 0;
+            font-size: 24px;
+        }
+        .header h2 {
+            color: #666;
+            margin: 10px 0 0;
+            font-size: 20px;
+        }
+        .booking-details {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .booking-details h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .qr-code {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+        }
+        .qr-code img {
+            max-width: 200px;
+            height: auto;
+            margin: 15px auto;
+            display: block;
+            padding: 10px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            color: #666;
+            font-size: 14px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .important-note {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            border: 1px solid #ffeeba;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ museum_name }}</h1>
+            <h2>Booking Confirmation</h2>
+        </div>
+
+        <p>Dear {{ booking.name }},</p>
+
+        <p>Thank you for booking your visit to {{ museum_name }}. Your booking has been confirmed!</p>
+
+        <div class="booking-details">
+            <h3>Booking Details</h3>
+            <p><strong>Booking Reference:</strong> {{ booking_reference }}</p>
+            <p><strong>Ticket Type:</strong> {{ ticket_type }}</p>
+            <p><strong>Quantity:</strong> {{ quantity }}</p>
+            <p><strong>Visit Date:</strong> {{ visit_date }}</p>
+            <p><strong>Total Amount:</strong> ${{ total_amount }}</p>
+        </div>
+
+        <!-- <div class="qr-code">
+            <h3>Your Entry QR Code</h3>
+            <p>Please present this QR code when you arrive at the museum:</p>
+            {% if qr_code_url %}
+            <img src="{{ qr_code_url }}" alt="Booking QR Code" style="max-width: 200px; height: auto;">
+            {% endif %}
+            <p style="font-size: 12px; color: #666;">Booking Reference: {{ booking_reference }}</p>
+        </div> -->
+
+        <div class="important-note">
+            <p><strong>Important:</strong></p>
+            <ul>
+                <li>Please save this email for your records</li>
+                <li>The QR code is also attached to this email</li>
+                <li>You can show either the QR code from this email or the attached image at entry</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p><strong>{{ museum_name }}</strong></p>
+            <p>{{ museum_address }}</p>
+            <p>Contact: {{ museum_contact }}</p>
+            <p>We look forward to your visit!</p>
+        </div>
+    </div>
+</body>
+</html> 

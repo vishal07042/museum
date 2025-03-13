@@ -1,0 +1,10 @@
+INFO 2025-03-11 21:19:51,923 utils Starting email sending process for booking BK830B759D
+INFO 2025-03-11 21:19:51,924 utils Generated QR code URL: http://127.0.0.1:8000/media/qr_codes/qr_code_BK830B759D.png
+INFO 2025-03-11 21:19:51,930 utils Successfully rendered email template
+INFO 2025-03-11 21:19:51,943 utils Successfully attached QR code to email
+INFO 2025-03-11 21:19:56,492 utils Successfully sent booking confirmation email to mishrashaurya97@gmail.com
+INFO 2025-03-11 22:05:04,412 utils Starting email sending process for booking BK852857E3
+INFO 2025-03-11 22:05:04,413 utils Generated QR code URL: http://127.0.0.1:8000/media/qr_codes/qr_code_BK852857E3.png
+INFO 2025-03-11 22:05:04,462 utils Successfully rendered email template
+INFO 2025-03-11 22:05:04,473 utils Successfully attached QR code to email
+INFO 2025-03-11 22:05:08,796 utils Successfully sent booking confirmation email to sh@mail.com
